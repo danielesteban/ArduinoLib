@@ -27,7 +27,7 @@ void AnalogInputs::setup(byte pin, analogInputEvent onChange) {
   _analogInputs = a;
 }
 
-void AnalogInputs::read() {
+void AnalogInputs::read(bool dontTriggerEvents) {
   unsigned long t = millis();
   if(t < _lastRead + 1) return;
   _lastRead = t;
@@ -43,6 +43,7 @@ void AnalogInputs::read() {
       read < 2 && (read = 0);
       read > 1021 && (read = 1023);
       a->read = read;
+      if(dontTriggerEvents) continue;
       if(a->onChange != NULL) a->onChange(a->pin, a->read);
       else if(_onChange != NULL) _onChange(a->pin, a->read);
     }

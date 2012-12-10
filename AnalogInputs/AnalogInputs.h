@@ -27,7 +27,7 @@ class AnalogInputs {
   public:
     AnalogInputs(analogInputEvent onChange = NULL);
     void setup(byte pin, analogInputEvent onChange = NULL);
-    void read();
+    void read(bool dontTriggerEvents = false);
     analogInput * get(byte pin);
   private:
     analogInput * _analogInputs;
