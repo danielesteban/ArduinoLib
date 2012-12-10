@@ -43,9 +43,10 @@ void AnalogInputs::read(bool dontTriggerEvents) {
       read < 2 && (read = 0);
       read > 1021 && (read = 1023);
       a->read = read;
-      if(dontTriggerEvents) continue;
-      if(a->onChange != NULL) a->onChange(a->pin, a->read);
-      else if(_onChange != NULL) _onChange(a->pin, a->read);
+      if(!dontTriggerEvents) {
+        if(a->onChange != NULL) a->onChange(a->pin, a->read);
+        else if(_onChange != NULL) _onChange(a->pin, a->read);
+      }
     }
     a = a->next;
   }
