@@ -1,4 +1,0 @@
-[submodule "glcd"]
-	path = glcd
-	url = https://github.com/stuartpittaway/glcd.git
-	ignore = dirty
