@@ -7,7 +7,12 @@
 #ifndef AnalogInputs_h
 #define AnalogInputs_h
 
+#if defined(ARDUINO) && ARDUINO >= 100
 #include <Arduino.h>
+#else
+#include <stdlib.h>
+#include <WProgram.h>
+#endif
 
 typedef void (*analogInputEvent)(byte pin, int read); 
 

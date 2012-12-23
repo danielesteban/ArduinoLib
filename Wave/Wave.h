@@ -7,14 +7,17 @@
 #ifndef Wave_h
 #define Wave_h
 
+#if defined(ARDUINO) && ARDUINO >= 100
 #include <Arduino.h>
+const String WaveShapeNames[] = {"Square", "Triang", "Saw", "Sine"};
+#else
+#include <WProgram.h>
+#endif
 
 #define WaveShapeSquare (0)
 #define WaveShapeTriangle (1)
 #define WaveShapeSaw (2)
 #define WaveShapeSine (3)
-
-const String WaveShapeNames[] = {"Square", "Triang", "Saw", "Sine"};
 
 class Wave {
 	public:
@@ -24,16 +27,14 @@ class Wave {
 		byte getShape();
 		byte next();
 	private:
-		byte _shape,
-			_byte,
-			_inc;
+		byte _shape;
 
 		unsigned int _sampleRate,
 	    	_frequency,
 	    	_count,
-	    	_byteInt,
-			_period,
-			_incInt;
+			_period;
+
+		float _inc;
 };
  
 #endif

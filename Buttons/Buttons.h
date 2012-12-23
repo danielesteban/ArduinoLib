@@ -7,7 +7,12 @@
 #ifndef Buttons_h
 #define Buttons_h
 
+#if defined(ARDUINO) && ARDUINO >= 100
 #include <Arduino.h>
+#else
+#include <stdlib.h>
+#include <WProgram.h>
+#endif
 
 typedef void (*buttonEvent)(byte pin); 
 

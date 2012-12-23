@@ -6,6 +6,12 @@
 
 #include "AnalogInputs.h"
 
+#if defined (__ARMEL__)
+const int _resolution = 4095;
+#else
+const int _resolution = 1023;
+#endif
+
 AnalogInputs::AnalogInputs(analogInputEvent onChange) {
   _onChange = onChange;
   _analogInputs = NULL;
@@ -18,7 +24,7 @@ void AnalogInputs::setup(byte pin, analogInputEvent onChange) {
   a->read = 0;
   a->sum = 0;
   for(byte i=0; i<analogInputsReadings; i++) {
-    a->readings[i] = 1023 - analogRead(a->pin);
+    a->readings[i] = _resolution - analogRead(a->pin);
     a->sum += a->readings[i];
   }
   a->reading = 0;
@@ -34,14 +40,14 @@ void AnalogInputs::read(bool dontTriggerEvents) {
   analogInput * a = _analogInputs;
   while(a) {
     a->sum -= a->readings[a->reading];
-    a->readings[a->reading] = 1023 - analogRead(a->pin);
+    a->readings[a->reading] = _resolution - analogRead(a->pin);
     a->sum += a->readings[a->reading];
     a->reading++;
     a->reading >= analogInputsReadings && (a->reading = 0);
     int read = round((float) a->sum / (float) analogInputsReadings);
     if(abs(a->read - read) > 1) {
       read < 2 && (read = 0);
-      read > 1021 && (read = 1023);
+      read > (_resolution - 2) && (read = _resolution);
       a->read = read;
       if(!dontTriggerEvents) {
         if(a->onChange != NULL) a->onChange(a->pin, a->read);
