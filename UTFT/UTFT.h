@@ -109,6 +109,7 @@
 	#include "WProgram.h"
 	#include "HW_PIC32_defines.h"
 #endif
+#include "SD.h"
 
 struct _current_font
 {
@@ -149,6 +150,8 @@ class UTFT
 		void setContrast(char c);
 		int  getDisplayXSize();
 		int	 getDisplayYSize();
+		void resetOrientation(byte orientation);
+		void loadBitmap(int x, int y, int sx, int sy, String filename);
 
 	protected:
 		byte fcolorr,fcolorg,fcolorb;

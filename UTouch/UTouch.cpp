@@ -26,7 +26,7 @@
 */
 
 #include "UTouch.h"
-#include "UTouchCD.h"
+//#include "UTouchCD.h"
 
 UTouch::UTouch(byte tclk, byte tcs, byte din, byte dout, byte irq)
 {
@@ -40,13 +40,13 @@ UTouch::UTouch(byte tclk, byte tcs, byte din, byte dout, byte irq)
 void UTouch::InitTouch(byte orientation)
 {
 	orient					= orientation;
-	_default_orientation	= CAL_S>>31;
-	touch_x_left			= (CAL_X>>14) & 0x3FFF;
-	touch_x_right			= CAL_X & 0x3FFF;
-	touch_y_top				= (CAL_Y>>14) & 0x3FFF;
-	touch_y_bottom			= CAL_Y & 0x3FFF;
-	disp_x_size				= (CAL_S>>12) & 0x0FFF;
-	disp_y_size				= CAL_S & 0x0FFF;
+	_default_orientation	= LANDSCAPE;
+	touch_x_left			= 3930;
+	touch_x_right			= 250;
+	touch_y_top				= 250;
+	touch_y_bottom			= 3850;
+	disp_x_size				= 340;
+	disp_y_size				= 240;
 	prec					= 10;
 
 	pinMode(T_CLK,  OUTPUT);
@@ -110,20 +110,20 @@ void UTouch::read()
 
 	for (int i=0; i<prec; i++)
 	{
-		touch_WriteData(0x90);        
-		digitalWrite(T_CLK,HIGH);
-		digitalWrite(T_CLK,LOW); 
-		temp_x=touch_ReadData();
-
 		touch_WriteData(0xD0);      
 		digitalWrite(T_CLK,HIGH);
 		digitalWrite(T_CLK,LOW);
-		temp_y=touch_ReadData();
+		temp_x=touch_ReadData();
 
+		touch_WriteData(0x90);        
+		digitalWrite(T_CLK,HIGH);
+		digitalWrite(T_CLK,LOW); 
+		temp_y=touch_ReadData();
+		
 		if (!((temp_x>max(touch_x_left, touch_x_right)) or (temp_x==0) or (temp_y>max(touch_y_top, touch_y_bottom)) or (temp_y==0)))
 		{
-			ty+=temp_x;
-			tx+=temp_y;
+			tx+=temp_x;
+			ty+=temp_y;
 			datacount++;
 		}
 	}
