@@ -2443,6 +2443,6 @@ void UTFT::loadBitmap(int x, int y, int sx, int sy, String filename)
 	sbi(P_CS, B_CS);
 }
 
-void UTFT::resetOrientation(byte orientation) {
+void UTFT::setOrientation(byte orientation) {
 	orient = orientation;
 }

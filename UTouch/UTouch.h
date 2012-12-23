@@ -55,6 +55,7 @@ class UTouch
 		int		getX();
 		int		getY();
 		void	setPrecision(byte precision);
+		void	setOrientation(byte orientation);
     
     private:
 		byte	T_CLK, T_CS, T_DIN, T_DOUT, T_IRQ;

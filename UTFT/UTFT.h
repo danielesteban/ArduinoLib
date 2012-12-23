@@ -150,8 +150,8 @@ class UTFT
 		void setContrast(char c);
 		int  getDisplayXSize();
 		int	 getDisplayYSize();
-		void resetOrientation(byte orientation);
 		void loadBitmap(int x, int y, int sx, int sy, String filename);
+		void setOrientation(byte orientation);
 
 	protected:
 		byte fcolorr,fcolorg,fcolorb;

@@ -231,3 +231,7 @@ void UTouch::setPrecision(byte precision)
 			break;
 	}
 }
+
+void UTouch::setOrientation(byte orientation) {
+	orient = orientation;
+}
