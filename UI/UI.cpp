@@ -14,8 +14,10 @@ UI::UI(TouchEvent onClick, TouchEvent onDown) {
 	_debounce = 0;
 }
 
-void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick, TouchEvent menuOnDown) {
-	int x, y;
+int * UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick, TouchEvent menuOnDown) {
+	int cords[2] = {-1, -1},
+		x, y;
+
 	bool hit = false;
 	UIButton * b;
 	byte bt = 255,
@@ -23,8 +25,8 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 	
 	if(touch.dataAvailable()) {
 		touch.read();
-		x = touch.getX();
-		y = touch.getY();
+		x = cords[0] = touch.getX();
+		y = cords[1] = touch.getY();
 
 		//Serial.print(x);
 		//Serial.print(" ");
@@ -74,6 +76,8 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 		_lastRead = _lastTouch = 255;
 		_debounce = 0;
 	}
+	
+	return cords;
 }
 
 void UI::addButton(char * label, int width, int height, int x, int y, TouchEvent onClick, TouchEvent onDown) {

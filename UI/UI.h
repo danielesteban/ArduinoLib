@@ -21,7 +21,7 @@ class UI {
     public:
         UI(TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         virtual void render(UTFT tft) = 0;
-        void readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick = NULL, TouchEvent menuOnDown = NULL);
+        int * readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick = NULL, TouchEvent menuOnDown = NULL);
     protected:
         void addButton(char * label, int width = -1, int height = -1, int x = -1, int y = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         UIButton * _buttons;
