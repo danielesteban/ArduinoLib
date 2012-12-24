@@ -14,5 +14,5 @@ UIButton::UIButton(char * l, int w, int h, int gx, int gy, TouchEvent oc, TouchE
 	y = gy;
 	onClick = oc;
 	onDown = od;
-    next = NULL;
+	next = NULL;
 }
