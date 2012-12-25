@@ -63,7 +63,7 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 					if(b->onDown != NULL) b->onDown(i);
 					else if(_onDown != NULL) _onDown(i);
 				}
-			}
+			} else if(_onDown != NULL) _onDown(255);
 	    }
 	}
 

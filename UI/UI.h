@@ -25,10 +25,9 @@ class UI {
     protected:
         void addButton(char * label, int width = -1, int height = -1, int x = -1, int y = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         UIButton * _buttons;
-    private:
         TouchEvent _onClick;
         TouchEvent _onDown;
-
+    private:
         UIButton * _lastButton;
 
         byte _lastRead,
