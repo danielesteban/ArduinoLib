@@ -7,6 +7,7 @@
 #include "Menu.h"
 
 const byte itemsPerPage = 6,
+	titleHeight = 13,
 	menuPadding = 20,
 	itemMargin = 10;
 
@@ -24,7 +25,8 @@ void onClickHandler(byte id);
 void onDownHandler(byte id);
 void renderItem(UIButton * b, bool pressed = false);
 
-Menu::Menu(byte numItems, char * items[], TouchEvent onClick, TouchEvent onDown) : UI() {
+Menu::Menu(char * title, byte numItems, char * items[], TouchEvent onClick, TouchEvent onDown) : UI() {
+	_title = title;
 	_numItems = numItems;
 	_onClick = onClickHandler;
 	_onDown = onDownHandler;
@@ -43,13 +45,18 @@ void Menu::render(UTFT tft) {
 	to > _numItems && (to = _numItems);
 
 	int itemWidth = tft.getDisplayXSize() - (menuPadding * 2),
-		itemHeight = (tft.getDisplayYSize() - (menuPadding * 2) - (itemMargin * (itemsPerPage - 1))) / itemsPerPage;
+		itemHeight = (tft.getDisplayYSize() - (menuPadding * 2) - titleHeight - (itemMargin * (itemsPerPage - 1))) / itemsPerPage;
 
 	itemPadding = (itemHeight - 10) / 2;
 	page = _page;
 
 	tft.clrScr();
+	tft.setColor(255, 255, 255);
+	tft.fillRect(0, 0, tft.getDisplayXSize() - 1, titleHeight - 1);
 	tft.setBackColor(255, 255, 255);
+	tft.setColor(0, 0, 0);
+	tft.print(_title, 10, 0);
+
 	_tft = tft;
 	UIButton * b = _buttons;
 	while(b != NULL) {
@@ -59,7 +66,7 @@ void Menu::render(UTFT tft) {
 		else {
 			_items[x - offset] = b;
 			b->x = menuPadding;
-			b->y = menuPadding + ((x - offset) * (itemHeight + itemMargin));
+			b->y = menuPadding + titleHeight + ((x - offset) * (itemHeight + itemMargin));
 			renderItem(b);
 		}
 		b = b->next;
@@ -81,15 +88,15 @@ void onDownHandler(byte id) {
 }
 
 void renderItem(UIButton * b, bool pressed) {
+	if(pressed) _tft.setColor(0, 172, 237);
+	else _tft.setColor(255, 255, 255);
+	_tft.fillRoundRect(b->x, b->y, b->x + b->width, b->y + b->height);
 	if(pressed) {
-		_tft.setBackColor(102, 102, 102);
-		_tft.setColor(102, 102, 102);
+		_tft.setBackColor(0, 172, 237);
+		_tft.setColor(255, 255, 255);
 	} else {
 		_tft.setBackColor(255, 255, 255);
-		_tft.setColor(255, 255, 255);
+		_tft.setColor(0, 0, 0);
 	}
-	_tft.fillRoundRect(b->x, b->y, b->x + b->width, b->y + b->height);
-	if(pressed) _tft.setColor(255, 255, 255);
-	else _tft.setColor(0, 0, 0);
 	_tft.print(b->label, b->x + itemPadding, b->y + itemPadding);
 }

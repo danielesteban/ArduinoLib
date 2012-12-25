@@ -12,6 +12,7 @@ UI::UI(TouchEvent onClick, TouchEvent onDown) {
 	_buttons = _lastButton = NULL;
 	_lastRead = _lastTouch = 255;
 	_debounce = 0;
+	availableOrientations[PORTRAIT] = availableOrientations[LANDSCAPE] = 1;
 }
 
 void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick, TouchEvent menuOnDown, int * cords) {
