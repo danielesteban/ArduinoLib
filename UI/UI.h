@@ -17,18 +17,21 @@
 #include <UTouch.h>
 #include "UIButton.h"
 
+extern uint8_t SmallFont[];
+extern uint8_t BigFont[];
+
 class UI {
     public:
-        UI(TouchEvent onClick = NULL, TouchEvent onDown = NULL);
+        UI();
         virtual void render(UTFT tft) = 0;
         void readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick = NULL, TouchEvent menuOnDown = NULL, int * cords = NULL);
         byte availableOrientations[2];
     protected:
         void addButton(char * label, int width = -1, int height = -1, int x = -1, int y = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         virtual void onTouch(byte orientation, int x, int y) {};
+        virtual void onClick(byte id) {};
+        virtual void onDown(byte id) {};
         UIButton * _buttons;
-        TouchEvent _onClick;
-        TouchEvent _onDown;
     private:
         UIButton * _lastButton;
 

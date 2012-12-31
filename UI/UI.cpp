@@ -6,9 +6,7 @@
 
 #include "UI.h"
 
-UI::UI(TouchEvent onClick, TouchEvent onDown) {
-	_onClick = onClick;
-	_onDown = onDown;
+UI::UI() {
 	_buttons = _lastButton = NULL;
 	_lastRead = _lastTouch = 255;
 	_debounce = 0;
@@ -64,9 +62,9 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 					if(menuOnDown != NULL) menuOnDown(bt - 250);
 				} else {
 					if(b->onDown != NULL) b->onDown(i);
-					else if(_onDown != NULL) _onDown(i);
+					else onDown(i);
 				}
-			} else if(_onDown != NULL) _onDown(255);
+			} else onDown(255);
 	    }
 	}
 
@@ -77,7 +75,7 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 			b = _buttons;
 			for(i=0; i<_lastTouch; i++) b = b->next;
 			if(b->onClick != NULL) b->onClick(_lastTouch);
-			else if(_onClick != NULL) _onClick(_lastTouch);
+			else onClick(_lastTouch);
 		}
 		_lastRead = _lastTouch = 255;
 		_debounce = 0;

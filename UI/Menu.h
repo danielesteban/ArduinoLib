@@ -13,18 +13,36 @@
 #include <stdlib.h>
 #include <WProgram.h>
 #endif
-#include <UTFT.h>
 #include "UI.h"
 
 class Menu : public UI {
     public:
         Menu(char * title, byte numItems, char * items[], TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         void render(UTFT tft);
+        void setLabel(byte id, char * label);
     private:
+        static const byte itemsPerPage = 6,
+            titleHeight = 13,
+            menuPadding = 20,
+            itemMargin = 10;
+
         byte _numItems,
-            _page;
+            _page,
+            _itemPadding,
+            _lastPress;
+
+        UTFT _tft;
 
         char * _title;
+
+        TouchEvent _onClick;
+        TouchEvent _onDown;
+
+        UIButton * _items[itemsPerPage];
+
+        void renderItem(UIButton * b, bool pressed = false);
+        void onClick(byte id);
+        void onDown(byte id);
 };
  
 #endif

@@ -6,34 +6,12 @@
 
 #include "Menu.h"
 
-extern uint8_t SmallFont[];
-
-const byte itemsPerPage = 6,
-	titleHeight = 13,
-	menuPadding = 20,
-	itemMargin = 10;
-
-byte itemPadding,
-	lastPress = 255;
-
-UTFT _tft;
-
-TouchEvent __onClick;
-TouchEvent __onDown;
-
-UIButton * _items[itemsPerPage];
-
-void onClickHandler(byte id);
-void onDownHandler(byte id);
-void renderItem(UIButton * b, bool pressed = false);
-
 Menu::Menu(char * title, byte numItems, char * items[], TouchEvent onClick, TouchEvent onDown) : UI() {
 	_title = title;
 	_numItems = numItems;
-	_onClick = onClickHandler;
-	_onDown = onDownHandler;
-	__onClick = onClick;
-	__onDown = onDown;
+	_onClick = onClick;
+	_onDown = onDown;
+	_lastPress = 255;
 	for(byte x=0; x<numItems; x++) addButton(items[x]);
 }
 
@@ -49,8 +27,8 @@ void Menu::render(UTFT tft) {
 	int itemWidth = tft.getDisplayXSize() - (menuPadding * 2),
 		itemHeight = (tft.getDisplayYSize() - (menuPadding * 2) - titleHeight - (itemMargin * (itemsPerPage - 1))) / itemsPerPage;
 
-	itemPadding = (itemHeight - 10) / 2;
-	page = _page;
+	_itemPadding = (itemHeight - 10) / 2;
+	_page = page;
 
 	tft.clrScr();
 	tft.setColor(255, 255, 255);
@@ -77,20 +55,29 @@ void Menu::render(UTFT tft) {
 	}
 }
 
-void onClickHandler(byte id) {
-	lastPress = 255;
+void Menu::setLabel(byte id, char * label) {
+	UIButton * b = _buttons;
+	byte x = 0;
+	while(b != NULL && x < id) {
+		b = b->next;
+		x++;
+	}
+}
+
+void Menu::onClick(byte id) {
+	_lastPress = 255;
 	renderItem(_items[id]);
-	if(__onClick != NULL) __onClick(id);
+	if(_onClick != NULL) _onClick((_page * itemsPerPage) + id);
 }
 
-void onDownHandler(byte id) {
-	if(lastPress != 255) renderItem(_items[lastPress]);
-	lastPress = id;
+void Menu::onDown(byte id) {
+	if(_lastPress != 255) renderItem(_items[_lastPress]);
+	_lastPress = id;
 	if(id != 255) renderItem(_items[id], true);
-	if(__onDown != NULL) __onDown(id);
+	if(_onDown != NULL) _onDown((_page * itemsPerPage) + id);
 }
 
-void renderItem(UIButton * b, bool pressed) {
+void Menu::renderItem(UIButton * b, bool pressed) {
 	if(pressed) _tft.setColor(0, 172, 237);
 	else _tft.setColor(255, 255, 255);
 	_tft.fillRoundRect(b->x, b->y, b->x + b->width, b->y + b->height);
@@ -101,5 +88,5 @@ void renderItem(UIButton * b, bool pressed) {
 		_tft.setBackColor(255, 255, 255);
 		_tft.setColor(0, 0, 0);
 	}
-	_tft.print(b->label, b->x + itemPadding, b->y + itemPadding);
+	_tft.print(b->label, b->x + _itemPadding, b->y + _itemPadding);
 }
