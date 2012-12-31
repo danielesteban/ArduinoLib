@@ -50,6 +50,8 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 				b = b->next;
 				i++;
 			}
+
+			onTouch(orientation, x, y);
 		}
 
 		unsigned long t = millis();

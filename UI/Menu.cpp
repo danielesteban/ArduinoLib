@@ -6,6 +6,8 @@
 
 #include "Menu.h"
 
+extern uint8_t SmallFont[];
+
 const byte itemsPerPage = 6,
 	titleHeight = 13,
 	menuPadding = 20,
@@ -55,6 +57,7 @@ void Menu::render(UTFT tft) {
 	tft.fillRect(0, 0, tft.getDisplayXSize() - 1, titleHeight - 1);
 	tft.setBackColor(255, 255, 255);
 	tft.setColor(0, 0, 0);
+	tft.setFont(SmallFont);
 	tft.print(_title, 10, 0);
 
 	_tft = tft;

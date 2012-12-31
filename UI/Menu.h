@@ -20,8 +20,6 @@ class Menu : public UI {
     public:
         Menu(char * title, byte numItems, char * items[], TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         void render(UTFT tft);
-        void touch(int x, int y);
-        void click();
     private:
         byte _numItems,
             _page;

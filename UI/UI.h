@@ -25,6 +25,7 @@ class UI {
         byte availableOrientations[2];
     protected:
         void addButton(char * label, int width = -1, int height = -1, int x = -1, int y = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
+        virtual void onTouch(byte orientation, int x, int y) {};
         UIButton * _buttons;
         TouchEvent _onClick;
         TouchEvent _onDown;
