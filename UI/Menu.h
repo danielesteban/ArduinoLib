@@ -17,9 +17,9 @@
 
 class Menu : public UI {
     public:
-        Menu(char * title, byte numItems, char * items[], TouchEvent onClick = NULL, TouchEvent onDown = NULL);
+        Menu(String title, byte numItems, String items[], TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         void render(UTFT tft);
-        void setLabel(byte id, char * label);
+        void setLabel(byte id, String label);
     private:
         static const byte itemsPerPage = 6,
             titleHeight = 13,
@@ -33,7 +33,7 @@ class Menu : public UI {
 
         UTFT _tft;
 
-        char * _title;
+        String _title;
 
         TouchEvent _onClick;
         TouchEvent _onDown;

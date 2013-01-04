@@ -6,7 +6,7 @@
 
 #include "UIButton.h"
 
-UIButton::UIButton(char * l, int w, int h, int gx, int gy, TouchEvent oc, TouchEvent od) {
+UIButton::UIButton(String l, int gx, int gy, int w, int h, TouchEvent oc, TouchEvent od) {
 	label = l;
 	width = w;
 	height = h;

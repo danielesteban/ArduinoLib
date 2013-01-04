@@ -6,7 +6,7 @@
 
 #include "Menu.h"
 
-Menu::Menu(char * title, byte numItems, char * items[], TouchEvent onClick, TouchEvent onDown) : UI() {
+Menu::Menu(String title, byte numItems, String items[], TouchEvent onClick, TouchEvent onDown) : UI() {
 	_title = title;
 	_numItems = numItems;
 	_onClick = onClick;
@@ -25,7 +25,7 @@ void Menu::render(UTFT tft) {
 	to > _numItems && (to = _numItems);
 
 	int itemWidth = tft.getDisplayXSize() - (menuPadding * 2),
-		itemHeight = (tft.getDisplayYSize() - (menuPadding * 2) - titleHeight - (itemMargin * (itemsPerPage - 1))) / itemsPerPage;
+		itemHeight = (tft.getDisplayYSize() - (menuPadding * 2) - titleHeight - (itemMargin * ((_numItems > itemsPerPage ? itemsPerPage : _numItems) - 1))) / (_numItems > itemsPerPage ? itemsPerPage : _numItems);
 
 	_itemPadding = (itemHeight - 10) / 2;
 	_page = page;
@@ -55,13 +55,16 @@ void Menu::render(UTFT tft) {
 	}
 }
 
-void Menu::setLabel(byte id, char * label) {
+void Menu::setLabel(byte id, String label) {
 	UIButton * b = _buttons;
 	byte x = 0;
 	while(b != NULL && x < id) {
 		b = b->next;
 		x++;
 	}
+	if(b == NULL) return;
+	b->label = label;
+	renderItem(b);
 }
 
 void Menu::onClick(byte id) {

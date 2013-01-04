@@ -127,7 +127,7 @@ class UTFT
 		UTFT(byte model, int RS, int WR,int CS, int RST, int SER=0);
 		void InitLCD(byte orientation=LANDSCAPE);
 		void clrScr();
-		void drawPixel(int x, int y);
+		void drawPixel(int x, int y, bool cs = true);
 		void drawLine(int x1, int y1, int x2, int y2);
 		void fillScr(byte r, byte g, byte b);
 		void drawRect(int x1, int y1, int x2, int y2);
@@ -169,8 +169,8 @@ class UTFT
 		void LCD_Write_DATA(char VL);
 		void LCD_Write_COM_DATA(char com1,int dat1);
 		void setPixel(byte r,byte g,byte b);
-		void drawHLine(int x, int y, int l);
-		void drawVLine(int x, int y, int l);
+		void drawHLine(int x, int y, int l, bool cs = true);
+		void drawVLine(int x, int y, int l, bool cs = true);
 		void printChar(byte c, int x, int y);
 		void setXY(word x1, word y1, word x2, word y2);
 		void clrXY();

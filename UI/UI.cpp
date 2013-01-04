@@ -11,6 +11,7 @@ UI::UI() {
 	_lastRead = _lastTouch = 255;
 	_debounce = 0;
 	availableOrientations[PORTRAIT] = availableOrientations[LANDSCAPE] = 1;
+	rendered = false;
 }
 
 void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick, TouchEvent menuOnDown, int * cords) {
@@ -82,8 +83,8 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 	}
 }
 
-void UI::addButton(char * label, int width, int height, int x, int y, TouchEvent onClick, TouchEvent onDown) {
-	UIButton * b = new UIButton(label, width, height, x, y, onClick, onDown);
+void UI::addButton(String label, int x, int y, int width, int height, TouchEvent onClick, TouchEvent onDown) {
+	UIButton * b = new UIButton(label, x, y, width, height, onClick, onDown);
     if(_buttons == NULL) _buttons = _lastButton = b;
     else {
         _lastButton->next = b;

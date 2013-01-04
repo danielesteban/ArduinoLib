@@ -18,12 +18,12 @@ typedef void (*TouchEvent)(byte id);
 
 class UIButton {
     public:
-        UIButton(char * l, int w = -1, int h = -1, int gx = -1, int gy = -1, TouchEvent oc = NULL, TouchEvent od = NULL);
+        UIButton(String l, int gx = -1, int gy = -1, int w = -1, int h = -1, TouchEvent oc = NULL, TouchEvent od = NULL);
         int width;
         int height;
         int x;
         int y;
-        char * label;
+        String label;
         TouchEvent onClick;
         TouchEvent onDown;
         UIButton * next;

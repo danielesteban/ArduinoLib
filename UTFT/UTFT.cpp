@@ -1563,10 +1563,15 @@ void UTFT::drawRect(int x1, int y1, int x2, int y2)
 		swap(int, y1, y2);
 	}
 
-	drawHLine(x1, y1, x2-x1);
-	drawHLine(x1, y2, x2-x1);
-	drawVLine(x1, y1, y2-y1);
-	drawVLine(x2, y1, y2-y1);
+	cbi(P_CS, B_CS);
+
+	drawHLine(x1, y1, x2-x1, false);
+	drawHLine(x1, y2, x2-x1, false);
+	drawVLine(x1, y1, y2-y1, false);
+	drawVLine(x2, y1, y2-y1, false);
+
+	sbi(P_CS, B_CS);
+	clrXY();
 }
 
 void UTFT::drawRoundRect(int x1, int y1, int x2, int y2)
@@ -1581,17 +1586,23 @@ void UTFT::drawRoundRect(int x1, int y1, int x2, int y2)
 	{
 		swap(int, y1, y2);
 	}
+
+	cbi(P_CS, B_CS);
+
 	if ((x2-x1)>4 && (y2-y1)>4)
 	{
-		drawPixel(x1+1,y1+1);
-		drawPixel(x2-1,y1+1);
-		drawPixel(x1+1,y2-1);
-		drawPixel(x2-1,y2-1);
-		drawHLine(x1+2, y1, x2-x1-4);
-		drawHLine(x1+2, y2, x2-x1-4);
-		drawVLine(x1, y1+2, y2-y1-4);
-		drawVLine(x2, y1+2, y2-y1-4);
+		drawPixel(x1+1, y1+1, false);
+		drawPixel(x2-1, y1+1, false);
+		drawPixel(x1+1, y2-1, false);
+		drawPixel(x2-1, y2-1, false);
+		drawHLine(x1+2, y1, x2-x1-4, false);
+		drawHLine(x1+2, y2, x2-x1-4, false);
+		drawVLine(x1, y1+2, y2-y1-4, false);
+		drawVLine(x2, y1+2, y2-y1-4, false);
 	}
+
+	sbi(P_CS, B_CS);
+	clrXY();
 }
 
 void UTFT::fillRect(int x1, int y1, int x2, int y2)
@@ -1607,22 +1618,27 @@ void UTFT::fillRect(int x1, int y1, int x2, int y2)
 		swap(int, y1, y2);
 	}
 
+	cbi(P_CS, B_CS);
+
 	if (orient==PORTRAIT)
 	{
 		for (int i=0; i<((y2-y1)/2)+1; i++)
 		{
-			drawHLine(x1, y1+i, x2-x1);
-			drawHLine(x1, y2-i, x2-x1);
+			drawHLine(x1, y1+i, x2-x1, false);
+			drawHLine(x1, y2-i, x2-x1, false);
 		}
 	}
 	else
 	{
 		for (int i=0; i<((x2-x1)/2)+1; i++)
 		{
-			drawVLine(x1+i, y1, y2-y1);
-			drawVLine(x2-i, y1, y2-y1);
+			drawVLine(x1+i, y1, y2-y1, false);
+			drawVLine(x2-i, y1, y2-y1, false);
 		}
 	}
+
+	sbi(P_CS, B_CS);
+	clrXY();
 }
 
 void UTFT::fillRoundRect(int x1, int y1, int x2, int y2)
@@ -1638,6 +1654,8 @@ void UTFT::fillRoundRect(int x1, int y1, int x2, int y2)
 		swap(int, y1, y2);
 	}
 
+	cbi(P_CS, B_CS);
+
 	if ((x2-x1)>4 && (y2-y1)>4)
 	{
 		for (int i=0; i<((y2-y1)/2)+1; i++)
@@ -1645,19 +1663,22 @@ void UTFT::fillRoundRect(int x1, int y1, int x2, int y2)
 			switch(i)
 			{
 			case 0:
-				drawHLine(x1+2, y1+i, x2-x1-4);
-				drawHLine(x1+2, y2-i, x2-x1-4);
+				drawHLine(x1+2, y1+i, x2-x1-4, false);
+				drawHLine(x1+2, y2-i, x2-x1-4, false);
 				break;
 			case 1:
-				drawHLine(x1+1, y1+i, x2-x1-2);
-				drawHLine(x1+1, y2-i, x2-x1-2);
+				drawHLine(x1+1, y1+i, x2-x1-2, false);
+				drawHLine(x1+1, y2-i, x2-x1-2, false);
 				break;
 			default:
-				drawHLine(x1, y1+i, x2-x1);
-				drawHLine(x1, y2-i, x2-x1);
+				drawHLine(x1, y1+i, x2-x1, false);
+				drawHLine(x1, y2-i, x2-x1, false);
 			}
 		}
 	}
+
+	sbi(P_CS, B_CS);
+	clrXY();
 }
 
 void UTFT::drawCircle(int x, int y, int radius)
@@ -1793,13 +1814,15 @@ void UTFT::setPixel(byte r,byte g,byte b)
 	LCD_Write_DATA(((r&248)|g>>5),((g&28)<<3|b>>3));	// rrrrrggggggbbbbb
 }
 
-void UTFT::drawPixel(int x, int y)
+void UTFT::drawPixel(int x, int y, bool cs)
 {
-	cbi(P_CS, B_CS);
+	if(cs) cbi(P_CS, B_CS);
 	setXY(x, y, x, y);
 	setPixel(fcolorr, fcolorg, fcolorb);
-	sbi(P_CS, B_CS);
-	clrXY();
+	if(cs) {
+		sbi(P_CS, B_CS);
+		clrXY();
+	}
 }
 
 void UTFT::drawLine(int x1, int y1, int x2, int y2)
@@ -1893,38 +1916,42 @@ void UTFT::drawLine(int x1, int y1, int x2, int y2)
 	clrXY();
 }
 
-void UTFT::drawHLine(int x, int y, int l)
+void UTFT::drawHLine(int x, int y, int l, bool cs)
 {
 	char ch, cl;
 	
 	ch=((fcolorr&248)|fcolorg>>5);
 	cl=((fcolorg&28)<<3|fcolorb>>3);
 
-	cbi(P_CS, B_CS);
+	if(cs) cbi(P_CS, B_CS);
 	setXY(x, y, x+l, y);
 	for (int i=0; i<l+1; i++)
 	{
 		LCD_Write_DATA(ch, cl);
 	}
-	sbi(P_CS, B_CS);
-	clrXY();
+	if(cs) {
+		sbi(P_CS, B_CS);
+		clrXY();
+	}
 }
 
-void UTFT::drawVLine(int x, int y, int l)
+void UTFT::drawVLine(int x, int y, int l, bool cs)
 {
 	char ch, cl;
 	
 	ch=((fcolorr&248)|fcolorg>>5);
 	cl=((fcolorg&28)<<3|fcolorb>>3);
 
-	cbi(P_CS, B_CS);
+	if(cs) cbi(P_CS, B_CS);
 	setXY(x, y, x, y+l);
 	for (int i=0; i<l; i++)
 	{
 		LCD_Write_DATA(ch, cl);
 	}
-	sbi(P_CS, B_CS);
-	clrXY();
+	if(cs) {
+		sbi(P_CS, B_CS);
+		clrXY();
+	}
 }
 
 void UTFT::printChar(byte c, int x, int y)

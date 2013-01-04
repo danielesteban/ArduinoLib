@@ -9,7 +9,7 @@
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include <Arduino.h>
-const String WaveShapeNames[] = {"Square", "Triang", "Saw", "Sine"};
+const String WaveShapeNames[] = {"Square", "Triangle", "Saw", "Sine"};
 #else
 #include <WProgram.h>
 #endif

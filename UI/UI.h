@@ -24,10 +24,12 @@ class UI {
     public:
         UI();
         virtual void render(UTFT tft) = 0;
+        virtual void update() {};
         void readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick = NULL, TouchEvent menuOnDown = NULL, int * cords = NULL);
         byte availableOrientations[2];
+        bool rendered;
     protected:
-        void addButton(char * label, int width = -1, int height = -1, int x = -1, int y = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
+        void addButton(String label, int x = -1, int y = -1, int width = -1, int height = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         virtual void onTouch(byte orientation, int x, int y) {};
         virtual void onClick(byte id) {};
         virtual void onDown(byte id) {};
