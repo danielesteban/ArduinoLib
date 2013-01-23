@@ -31,6 +31,7 @@ class UI {
     protected:
         void addButton(String label, int x = -1, int y = -1, int width = -1, int height = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         virtual void onTouch(byte orientation, int x, int y) {};
+        virtual void onTouchEnd() {};
         virtual void onClick(byte id) {};
         virtual void onDown(byte id) {};
         UIButton * _buttons;

@@ -42,7 +42,7 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 			b = _buttons;
 			i = 0;
 			while(b != NULL) {
-				if(x >= b->x && y >= b->y && x <= b->x + b->width && y <= b->y + b->height) {
+				if(b->x != -1 && b->y != -1 && x >= b->x && y >= b->y && x <= b->x + b->width && y <= b->y + b->height) {
 					bt = i;
 					break;	
 				}
@@ -69,17 +69,19 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 	    }
 	}
 
-	if(_lastTouch != 255 && !touch.dataAvailable()) {
-		if(_lastTouch >= 250) { //menu buttons
-			if(menuOnClick != NULL) menuOnClick(_lastTouch - 250);
-		} else {
-			b = _buttons;
-			for(i=0; i<_lastTouch; i++) b = b->next;
-			if(b->onClick != NULL) b->onClick(_lastTouch);
-			else onClick(_lastTouch);
-		}
-		_lastRead = _lastTouch = 255;
-		_debounce = 0;
+	if(!touch.dataAvailable()) {
+		if(_lastTouch != 255) {
+			if(_lastTouch >= 250) { //menu buttons
+				if(menuOnClick != NULL) menuOnClick(_lastTouch - 250);
+			} else {
+				b = _buttons;
+				for(i=0; i<_lastTouch; i++) b = b->next;
+				if(b->onClick != NULL) b->onClick(_lastTouch);
+				else onClick(_lastTouch);
+			}
+			_lastRead = _lastTouch = 255;
+			_debounce = 0;
+		} else onTouchEnd();
 	}
 }
 

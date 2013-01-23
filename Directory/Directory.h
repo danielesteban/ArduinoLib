@@ -21,36 +21,45 @@ typedef struct file {
     struct file * next;
 } file;
 
-file * getDirectory(const char * path, const bool filesOnly = true) {
-    File dir = SD.open(path),
-        entry;
+class Directory {
+    public:
+        Directory(const char * path, const bool filesOnly = true) {
+            File dir = SD.open(path),
+                entry;
 
-    file * files = NULL,
-        * lastFile;
-    
-    while(entry = dir.openNextFile()) {
-        if(filesOnly && entry.isDirectory()) continue;
-        file * f = (file *) malloc(sizeof(file));
-        strcpy(f->name, entry.name());
-        f->isDirectory = entry.isDirectory();
-        !f->isDirectory && (f->size = entry.size());
-        f->next = NULL;
-        if(files == NULL) files = lastFile = f;
-        else {
-            lastFile->next = f;
-            lastFile = f;
+            files = NULL;
+            file * lastFile;
+            
+            while(entry = dir.openNextFile()) {
+                if(filesOnly && entry.isDirectory()) continue;
+                file * f = (file *) malloc(sizeof(file));
+                strcpy(f->name, entry.name());
+                f->isDirectory = entry.isDirectory();
+                !f->isDirectory && (f->size = entry.size());
+                f->next = NULL;
+                if(files == NULL) files = lastFile = f;
+                else {
+                    lastFile->next = f;
+                    lastFile = f;
+                }
+            }
+            dir.close();
         }
-    }
-    dir.close();
-    return files;
-}
 
-void freeDirectory(file * directory) {
-    while(directory != NULL) {
-        file * next = directory->next;
-        free(directory);
-        directory = next;
-    }
-}
+        inline file * getFiles() {
+            return files;
+        }
+
+        ~Directory() {
+            while(files != NULL) {
+                file * next = files->next;
+                free(files);
+                files = next;
+            }
+        }
+
+    private:
+        file * files;
+};
  
 #endif
