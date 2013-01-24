@@ -34,7 +34,8 @@ class Wave {
 	    	_count,
 			_period;
 
-		float _inc;
+		float _inc,
+			_out;
 };
  
 #endif
