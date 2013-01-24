@@ -39,7 +39,6 @@ void Wave::setFrequency(unsigned int frequency) {
 		case WaveShapeSine:
 			_inc = (float) sineLength / period;
 	}
-	_out = 0;
 }
 
 void Wave::setShape(byte shape) {
