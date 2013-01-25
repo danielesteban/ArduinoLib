@@ -23,22 +23,23 @@ Wave::Wave(byte shape, unsigned int sampleRate, unsigned int frequency) {
 }
 
 void Wave::setFrequency(unsigned int frequency) {
-	float period = (float) _sampleRate / (float) frequency;
 	_frequency = frequency;
-	_period = period;
+	_period = _sampleRate / frequency;
+	_period == 0 && (_period = 1);
 	switch(_shape) {
 		case WaveShapeSquare:
 			
 		break;
 		case WaveShapeTriangle:
-			_inc = 511 / period;
+			_inc = 511 / _period;
 		break;
 		case WaveShapeSaw:
-			_inc = 255 / period;
+			_inc = 255 / _period;
 		break;
 		case WaveShapeSine:
-			_inc = (float) sineLength / period;
+			_intInc = sineLength / _period;
 	}
+	_inc == 0 && (_inc = 1);
 }
 
 void Wave::setShape(byte shape) {
@@ -61,8 +62,6 @@ byte Wave::next() {
 			output = (_period - _count) > _count ? 255 : 0;
 		break;
 		case WaveShapeTriangle:
-			//if((_period - _count) > _count) output = _count * _inc;
-			//else output = (_period - _count) * _inc;
 			if(_count == 0) _out = 0;
 			else {
 				if((_period - _count) > _count) _out += _inc;
@@ -71,19 +70,15 @@ byte Wave::next() {
 			output = _out;
 		break;
 		case WaveShapeSaw:
-			//output = _count * _inc;
 			if(_count == 0) _out = 0;
 			else _out += _inc;
 			output = _out;
 		break;
 		case WaveShapeSine:
 			#if defined (__ARMEL__)
-  		  		output = sineWave[(int) (_count * _inc)];
+  		  		output = sineWave[_count * _intInc];
 			#else
-  		  		//output = pgm_read_byte_near(sineWave + (int) (_count * _inc));
-  		  		if(_count == 0) _out = 0;
-				else _out += _inc;
-  		  		output = pgm_read_byte_near(sineWave + (int) _out);
+  		  		output = pgm_read_byte_near(sineWave + (_count * _intInc));
   		  	#endif
 	}
 

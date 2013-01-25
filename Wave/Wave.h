@@ -27,14 +27,14 @@ class Wave {
 		byte getShape();
 		byte next();
 	private:
-		byte _shape;
+		byte _shape,
+			_inc;
 
 		unsigned int _sampleRate,
 	    	_frequency,
 	    	_count,
-			_period;
-
-		float _inc,
+			_period,
+			_intInc,
 			_out;
 };
  
