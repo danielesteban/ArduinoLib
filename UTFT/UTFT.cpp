@@ -1319,3 +1319,63 @@ int UTFT::getDisplayYSize()
 	else
 		return disp_x_size+1;
 }
+
+void UTFT::loadBitmap(int x, int y, int sx, int sy, String filename)
+{
+	int cx, cy, cp;
+	byte r,g,b;
+	char f[filename.length()];
+	filename.toCharArray(f, filename.length() + 1);
+	File bitmap = SD.open(f);
+	long size = bitmap.size();
+
+	cbi(P_CS, B_CS);
+	cx=0;
+	cy=0;
+	if (orient==PORTRAIT)
+	{
+		setXY(x, y, x+sx-1, y+sy-1);
+	}
+	while(size > 0) {
+		int bufferSize = size < 512 ? size : 512;
+		byte buffer[bufferSize];
+		bitmap.read(buffer, bufferSize);
+		if (orient==PORTRAIT)
+		{
+			for (int i=0; i<bufferSize; i+=2)
+				LCD_Write_DATA(buffer[i],buffer[i+1]);
+		}
+		else
+		{
+			cp=0;
+			while (cp<bufferSize)
+			{
+				if (((bufferSize-cp)/2)<(sx-cx))
+				{
+					setXY(x+cx, y+cy, x+cx+((bufferSize-cp)/2)-1, y+cy);
+					for (int i=(bufferSize-cp)-2; i>=0; i-=2)
+						LCD_Write_DATA(buffer[cp+i],buffer[cp+i+1]);
+					cx+=((bufferSize-cp)/2);
+					cp=bufferSize;
+				}
+				else
+				{
+					setXY(x+cx, y+cy, x+sx-1, y+cy);
+					for (int i=sx-cx-1; i>=0; i--)
+						LCD_Write_DATA(buffer[cp+(i*2)],buffer[cp+(i*2)+1]);
+					cp+=(sx-cx)*2;
+					cx=0;
+					cy++;
+				}
+			}
+		}
+		size -= bufferSize;
+	}
+	bitmap.close();
+	setXY(0,0,getDisplayXSize()-1,getDisplayYSize()-1);
+	sbi(P_CS, B_CS);
+}
+
+void UTFT::setOrientation(byte orientation) {
+	orient = orientation;
+}
