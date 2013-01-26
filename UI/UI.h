@@ -23,6 +23,7 @@ extern uint8_t BigFont[];
 class UI {
     public:
         UI();
+        ~UI();
         virtual void render(UTFT tft) = 0;
         virtual void update() {};
         void readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick = NULL, TouchEvent menuOnDown = NULL, int * cords = NULL);

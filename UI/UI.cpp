@@ -14,6 +14,14 @@ UI::UI() {
 	rendered = false;
 }
 
+UI::~UI() {
+	while(_buttons != NULL) {
+		UIButton * next = _buttons->next;
+		free(_buttons);
+		_buttons = next;
+	}
+}
+
 void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick, TouchEvent menuOnDown, int * cords) {
 	int x, y;
 	bool hit = false;
