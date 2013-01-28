@@ -2,3 +2,6 @@
 	path = glcd
 	url = https://github.com/dEsteban/glcd.git
 	ignore = dirty
+[submodule "Makefile"]
+	path = Makefile
+	url = https://github.com/mjoldfield/Arduino-Makefile.git
