@@ -25,7 +25,7 @@ void AnalogInputs::setup(byte pin, analogInputEvent onChange) {
   a->read = 0;
   a->sum = 0;
   for(byte i=0; i<analogInputsReadings; i++) {
-    a->readings[i] = _resolution - analogRead(a->pin);
+    a->readings[i] = analogRead(a->pin);
     a->sum += a->readings[i];
   }
   a->reading = 0;
@@ -41,7 +41,7 @@ void AnalogInputs::read(bool dontTriggerEvents) {
   analogInput * a = _analogInputs;
   while(a) {
     a->sum -= a->readings[a->reading];
-    a->readings[a->reading] = _resolution - analogRead(a->pin);
+    a->readings[a->reading] = analogRead(a->pin);
     a->sum += a->readings[a->reading];
     a->reading++;
     a->reading >= analogInputsReadings && (a->reading = 0);
