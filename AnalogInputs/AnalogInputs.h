@@ -30,12 +30,12 @@ typedef struct analogInput {
 
 class AnalogInputs {
   public:
-    AnalogInputs(analogInputEvent onChange = NULL, byte debounce = 1);
+    AnalogInputs(analogInputEvent onChange = NULL, byte delay = 1);
     void setup(byte pin, analogInputEvent onChange = NULL);
     void read(bool dontTriggerEvents = false);
     analogInput * get(byte pin);
   private:
-    byte _debounce;
+    byte _delay;
     unsigned long _lastRead;
     analogInput * _analogInputs;
     analogInputEvent _onChange;
