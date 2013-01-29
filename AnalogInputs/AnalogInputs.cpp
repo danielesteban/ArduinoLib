@@ -12,8 +12,9 @@ const int _resolution = 4095;
 const int _resolution = 1023;
 #endif
 
-AnalogInputs::AnalogInputs(analogInputEvent onChange) {
+AnalogInputs::AnalogInputs(analogInputEvent onChange, byte debounce) {
   _onChange = onChange;
+  _debounce = debounce;
   _analogInputs = NULL;
   _lastRead = 0;
 }
@@ -35,7 +36,7 @@ void AnalogInputs::setup(byte pin, analogInputEvent onChange) {
 
 void AnalogInputs::read(bool dontTriggerEvents) {
   unsigned long t = millis();
-  if(t < _lastRead + 1) return;
+  if(t < _lastRead + _debounce) return;
   _lastRead = t;
   analogInput * a = _analogInputs;
   while(a) {
