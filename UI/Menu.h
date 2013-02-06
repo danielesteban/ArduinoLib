@@ -17,9 +17,12 @@
 
 class Menu : public UI {
     public:
-        Menu(String title, byte numItems, String items[], TouchEvent onClick = NULL, TouchEvent onDown = NULL);
+        Menu(String title, byte numItems, String items[], ByteCallback onClick = NULL, ByteCallback onDown = NULL);
         void render(UTFT tft);
         void setLabel(byte id, String label, bool render = true);
+        void onDown(byte id);
+        void onClick(byte id);
+        UIButton * getButtons();
     private:
         static const byte itemsPerPage = 6,
             titleHeight = 13,
@@ -36,12 +39,10 @@ class Menu : public UI {
         String _title;
         String * _items;
 
-        TouchEvent _onClick;
-        TouchEvent _onDown;
+        ByteCallback _onClick;
+        ByteCallback _onDown;
 
         void renderItem(byte id, bool pressed = false);
-        void onClick(byte id);
-        void onDown(byte id);
 };
  
 #endif

@@ -1324,7 +1324,7 @@ void UTFT::loadBitmap(int x, int y, int sx, int sy, String filename)
 {
 	int cx, cy, cp;
 	byte r,g,b;
-	char f[filename.length()];
+	char f[filename.length() + 1];
 	filename.toCharArray(f, filename.length() + 1);
 	File bitmap = SD.open(f);
 	long size = bitmap.size();

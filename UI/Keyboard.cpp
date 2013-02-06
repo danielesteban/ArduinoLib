@@ -1,6 +1,6 @@
 /*
     Keyboard.cpp - Library for on screen keyboard.
-    Created by Daniel Esteban, February 5, 2012.
+    Created by Daniel Esteban, February 5, 2013.
     Released into the public domain.
 */
 
@@ -8,7 +8,7 @@
 
 const char Keyboard::keys[Keyboard::numKeys] = {'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '.'};
 
-Keyboard::Keyboard(KeyboardEvent callback, byte maxLength) : UI() {
+Keyboard::Keyboard(StringCallback callback, byte maxLength) : UI() {
 	availableOrientations[PORTRAIT] = 0;
 	_callback = callback;
 	_maxLength = maxLength;

@@ -1,6 +1,6 @@
 /*
     Keyboard.h - Library for on screen keyboard.
-    Created by Daniel Esteban, February 5, 2012.
+    Created by Daniel Esteban, February 5, 2013.
     Released into the public domain.
 */
 
@@ -15,11 +15,9 @@
 #endif
 #include "UI.h"
 
-typedef void (*KeyboardEvent)(String str);
-
 class Keyboard : public UI {
     public:
-        Keyboard(KeyboardEvent callback, byte maxLength = 255);
+        Keyboard(StringCallback callback, byte maxLength = 255);
         void render(UTFT tft);
     private:
         static const byte numKeys = 27;
@@ -27,7 +25,7 @@ class Keyboard : public UI {
 
         UTFT _tft;
         String _str;
-        KeyboardEvent _callback;
+        StringCallback _callback;
         byte _lastPress;
         byte _maxLength;
         void onTouch(byte orientation, int x, int y);

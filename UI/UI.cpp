@@ -22,7 +22,7 @@ UI::~UI() {
 	}
 }
 
-void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick, TouchEvent menuOnDown, int * cords) {
+void UI::readTouch(UTFT tft, UTouch touch, byte orientation, ByteCallback menuOnClick, ByteCallback menuOnDown, int * cords) {
 	int x, y;
 	bool hit = false;
 	UIButton * b = NULL;
@@ -93,7 +93,7 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 	}
 }
 
-void UI::addButton(int x, int y, int width, int height, TouchEvent onClick, TouchEvent onDown) {
+void UI::addButton(int x, int y, int width, int height, ByteCallback onClick, ByteCallback onDown) {
 	UIButton * b = new UIButton(x, y, width, height, onClick, onDown);
     if(_buttons == NULL) _buttons = _lastButton = b;
     else {

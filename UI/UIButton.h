@@ -14,17 +14,17 @@
 #include <WProgram.h>
 #endif
 
-typedef void (*TouchEvent)(byte id);
+typedef void (*ByteCallback)(byte id);
 
 class UIButton {
     public:
-        UIButton(int gx = -1, int gy = -1, int w = -1, int h = -1, TouchEvent oc = NULL, TouchEvent od = NULL);
+        UIButton(int gx = -1, int gy = -1, int w = -1, int h = -1, ByteCallback oc = NULL, ByteCallback od = NULL);
         int width;
         int height;
         int x;
         int y;
-        TouchEvent onClick;
-        TouchEvent onDown;
+        ByteCallback onClick;
+        ByteCallback onDown;
         UIButton * next;
     private:
 };

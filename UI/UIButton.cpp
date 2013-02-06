@@ -6,7 +6,7 @@
 
 #include "UIButton.h"
 
-UIButton::UIButton(int gx, int gy, int w, int h, TouchEvent oc, TouchEvent od) {
+UIButton::UIButton(int gx, int gy, int w, int h, ByteCallback oc, ByteCallback od) {
 	width = w;
 	height = h;
 	x = gx;

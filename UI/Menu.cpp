@@ -6,7 +6,7 @@
 
 #include "Menu.h"
 
-Menu::Menu(String title, byte numItems, String items[], TouchEvent onClick, TouchEvent onDown) : UI() {
+Menu::Menu(String title, byte numItems, String items[], ByteCallback onClick, ByteCallback onDown) : UI() {
 	_title = title;
 	_numItems = numItems;
 	_items = items;
@@ -20,7 +20,7 @@ void Menu::render(UTFT tft) {
 	byte page = 0, 
 		offset = page * itemsPerPage,
 		x = 0;
-	
+
 	offset >= _numItems && (_page = offset = 0);
 	byte to = offset + itemsPerPage;
 	to > _numItems && (to = _numItems);
@@ -90,4 +90,8 @@ void Menu::renderItem(byte id, bool pressed) {
 		_tft.setColor(0, 0, 0);
 	}
 	_tft.print(_items[(_page * itemsPerPage) + id], b->x + _itemPadding, b->y + _itemPadding);
+}
+
+UIButton * Menu::getButtons() {
+	return _buttons;
 }

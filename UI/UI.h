@@ -15,22 +15,26 @@
 #endif
 #include <UTFT.h>
 #include <UTouch.h>
-#include "UIButton.h"
 
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
 
+typedef void (*Callback)(void);
+typedef void (*StringCallback)(String str);
+
+#include "UIButton.h"
+
 class UI {
     public:
         UI();
-        ~UI();
+        virtual ~UI();
         virtual void render(UTFT tft) = 0;
         virtual void update() {};
-        void readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnClick = NULL, TouchEvent menuOnDown = NULL, int * cords = NULL);
+        void readTouch(UTFT tft, UTouch touch, byte orientation, ByteCallback menuOnClick = NULL, ByteCallback menuOnDown = NULL, int * cords = NULL);
         byte availableOrientations[2];
         bool rendered;
     protected:
-        void addButton(int x = -1, int y = -1, int width = -1, int height = -1, TouchEvent onClick = NULL, TouchEvent onDown = NULL);
+        void addButton(int x = -1, int y = -1, int width = -1, int height = -1, ByteCallback onClick = NULL, ByteCallback onDown = NULL);
         virtual void onTouch(byte orientation, int x, int y) {};
         virtual void onTouchEnd() {};
         virtual void onClick(byte id) {};
