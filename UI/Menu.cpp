@@ -55,7 +55,7 @@ void Menu::render(UTFT tft) {
 	}
 }
 
-void Menu::setLabel(byte id, String label) {
+void Menu::setLabel(byte id, String label, bool render) {
 	UIButton * b = _buttons;
 	byte x = 0;
 	while(b != NULL && x < id) {
@@ -64,7 +64,7 @@ void Menu::setLabel(byte id, String label) {
 	}
 	if(b == NULL) return;
 	b->label = label;
-	renderItem(b);
+	if(render) renderItem(b);
 }
 
 void Menu::onClick(byte id) {

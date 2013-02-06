@@ -17,7 +17,7 @@ UI::UI() {
 UI::~UI() {
 	while(_buttons != NULL) {
 		UIButton * next = _buttons->next;
-		free(_buttons);
+		delete _buttons;
 		_buttons = next;
 	}
 }

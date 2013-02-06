@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <WProgram.h>
 #endif
+#include <SD.h>    
 
 typedef struct file {
     char name[12];
@@ -23,41 +24,9 @@ typedef struct file {
 
 class Directory {
     public:
-        Directory(const char * path, const bool filesOnly = true) {
-            File dir = SD.open(path),
-                entry;
-
-            files = NULL;
-            file * lastFile;
-            
-            while(entry = dir.openNextFile()) {
-                if(filesOnly && entry.isDirectory()) continue;
-                file * f = (file *) malloc(sizeof(file));
-                strcpy(f->name, entry.name());
-                f->isDirectory = entry.isDirectory();
-                !f->isDirectory && (f->size = entry.size());
-                f->next = NULL;
-                if(files == NULL) files = lastFile = f;
-                else {
-                    lastFile->next = f;
-                    lastFile = f;
-                }
-            }
-            dir.close();
-        }
-
-        inline file * getFiles() {
-            return files;
-        }
-
-        ~Directory() {
-            while(files != NULL) {
-                file * next = files->next;
-                free(files);
-                files = next;
-            }
-        }
-
+        Directory(const char * path, const bool filesOnly = true);
+        ~Directory();
+        file * getFiles();
     private:
         file * files;
 };

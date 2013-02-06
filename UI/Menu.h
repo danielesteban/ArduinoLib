@@ -19,7 +19,7 @@ class Menu : public UI {
     public:
         Menu(String title, byte numItems, String items[], TouchEvent onClick = NULL, TouchEvent onDown = NULL);
         void render(UTFT tft);
-        void setLabel(byte id, String label);
+        void setLabel(byte id, String label, bool render = true);
     private:
         static const byte itemsPerPage = 6,
             titleHeight = 13,
