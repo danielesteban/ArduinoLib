@@ -1,0 +1,22 @@
+{
+	"cmd": ["make", "-j3"],
+	"selector": "source.c++",
+	//"selector": "source.c++.arduino",
+	"working_dir" : "$project_path",
+	"variants":
+	[
+		{
+			"name": "Run",
+			"cmd": ["make -j3 && make upload"],
+			"shell" : true
+		},
+		{
+			"name": "Clean",
+			"cmd": ["make", "-j3", "clean"]
+		}/*,
+		{
+			"name": "Monitor",
+			"cmd": ["make", "monitor"]
+		}*/
+	]
+}
