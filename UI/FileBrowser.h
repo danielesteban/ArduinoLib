@@ -23,8 +23,12 @@ class FileBrowser : public UI {
         FileBrowser(String title, const char * path, StringCallback callback);
         ~FileBrowser();
         void render(UTFT tft);
+        void update();
     private:
-        byte _page;
+        UTFT _tft;
+        byte _page,
+            _renderedPage;
+        
         String _title;
         String _filename;
         Menu * _menu;
