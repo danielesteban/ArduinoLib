@@ -6,11 +6,11 @@
 
 #include "Directory.h"
 
-Directory::Directory(const char * path, const bool filesOnly) {
+Directory::Directory(const char * path, const bool filesOnly, const bool inverted) {
 	File dir = SD.open(path),
 	    entry;
 
-	files = NULL;
+	_files = NULL;
 	file * lastFile;
 
 	while(entry = dir.openNextFile()) {
@@ -19,25 +19,30 @@ Directory::Directory(const char * path, const bool filesOnly) {
 	    strcpy(f->name, entry.name());
 	    f->isDirectory = entry.isDirectory();
 	    !f->isDirectory && (f->size = entry.size());
-	    f->next = NULL;
-	    if(files == NULL) files = lastFile = f;
-	    else {
-	        lastFile->next = f;
-	        lastFile = f;
-	    }
+	    if(inverted) {
+	    	f->next = _files;
+ 			_files = f;
+	    } else {
+		    f->next = NULL;
+		    if(_files == NULL) _files = lastFile = f;
+		    else {
+		        lastFile->next = f;
+		        lastFile = f;
+		    }
+		}
 	    entry.close();
 	}
 	dir.close();
 }
 
 Directory::~Directory() {
-    while(files != NULL) {
-        file * next = files->next;
-        free(files);
-        files = next;
+    while(_files != NULL) {
+        file * next = _files->next;
+        free(_files);
+        _files = next;
     }
 }
 
 file * Directory::getFiles() {
-    return files;
+    return _files;
 }

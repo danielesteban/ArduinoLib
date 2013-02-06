@@ -24,11 +24,11 @@ typedef struct file {
 
 class Directory {
     public:
-        Directory(const char * path, const bool filesOnly = true);
+        Directory(const char * path, const bool filesOnly = true, const bool inverted = true);
         ~Directory();
         file * getFiles();
     private:
-        file * files;
+        file * _files;
 };
  
 #endif
