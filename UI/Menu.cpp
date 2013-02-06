@@ -69,7 +69,7 @@ void Menu::onDown(byte id) {
 	if(_lastPress != 255) renderItem(_lastPress);
 	_lastPress = id;
 	if(id != 255) renderItem(id, true);
-	if(_onDown != NULL) _onDown((_page * itemsPerPage) + id);
+	if(_onDown != NULL) _onDown(id != 255 ? (_page * itemsPerPage) + id : id);
 }
 
 void Menu::renderItem(byte id, bool pressed) {
