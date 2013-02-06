@@ -25,6 +25,7 @@ Directory::Directory(const char * path, const bool filesOnly) {
 	        lastFile->next = f;
 	        lastFile = f;
 	    }
+	    entry.close();
 	}
 	dir.close();
 }
