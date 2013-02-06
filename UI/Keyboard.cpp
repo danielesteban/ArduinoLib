@@ -1,5 +1,5 @@
 /*
-	Keyboard.cpp - Library for on screen keyboard.
+    Keyboard.cpp - Library for on screen keyboard.
     Created by Daniel Esteban, February 5, 2012.
     Released into the public domain.
 */
@@ -61,7 +61,7 @@ void Keyboard::render(UTFT tft) {
 
 void Keyboard::onTouch(byte orientation, int x, int y) {
 	if(y > 120 && y < 214) { //keys
-		if(_str.length() == _maxLength) return;
+		if(_maxLength != 255 && _str.length() == _maxLength) return;
 		y -= 120;
 		y = y / 32;
 		x -= y * 15;
