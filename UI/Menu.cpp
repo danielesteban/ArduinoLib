@@ -9,17 +9,18 @@
 Menu::Menu(String title, byte numItems, String items[], TouchEvent onClick, TouchEvent onDown) : UI() {
 	_title = title;
 	_numItems = numItems;
+	_items = items;
 	_onClick = onClick;
 	_onDown = onDown;
 	_lastPress = 255;
-	for(byte x=0; x<numItems; x++) addButton(items[x]);
+	for(byte x=0; x<itemsPerPage; x++) addButton();
 }
 
 void Menu::render(UTFT tft) {
 	byte page = 0, 
 		offset = page * itemsPerPage,
 		x = 0;
-
+	
 	offset >= _numItems && (_page = offset = 0);
 	byte to = offset + itemsPerPage;
 	to > _numItems && (to = _numItems);
@@ -40,47 +41,44 @@ void Menu::render(UTFT tft) {
 
 	_tft = tft;
 	UIButton * b = _buttons;
-	while(b != NULL) {
+	for(byte x=0; x<itemsPerPage; x++) {
 		b->width = itemWidth;
 		b->height = itemHeight;
-		if(x < offset || x >= to) b->x = b->y = -1;
+		if(x + offset >= to) b->x = b->y = -1;
 		else {
-			_items[x - offset] = b;
 			b->x = menuPadding;
-			b->y = menuPadding + titleHeight + ((x - offset) * (itemHeight + itemMargin));
-			renderItem(b);
+			b->y = menuPadding + titleHeight + (x * (itemHeight + itemMargin));
+			renderItem(x);
 		}
 		b = b->next;
-		x++;
 	}
 }
 
 void Menu::setLabel(byte id, String label, bool render) {
-	UIButton * b = _buttons;
-	byte x = 0;
-	while(b != NULL && x < id) {
-		b = b->next;
-		x++;
-	}
-	if(b == NULL) return;
-	b->label = label;
-	if(render) renderItem(b);
+	_items[id] = label;
+	if(render) renderItem(id - (_page * itemsPerPage));
 }
 
 void Menu::onClick(byte id) {
 	_lastPress = 255;
-	renderItem(_items[id]);
+	renderItem(id);
 	if(_onClick != NULL) _onClick((_page * itemsPerPage) + id);
 }
 
 void Menu::onDown(byte id) {
-	if(_lastPress != 255) renderItem(_items[_lastPress]);
+	if(_lastPress != 255) renderItem(_lastPress);
 	_lastPress = id;
-	if(id != 255) renderItem(_items[id], true);
+	if(id != 255) renderItem(id, true);
 	if(_onDown != NULL) _onDown((_page * itemsPerPage) + id);
 }
 
-void Menu::renderItem(UIButton * b, bool pressed) {
+void Menu::renderItem(byte id, bool pressed) {
+	byte c = 0;
+	UIButton * b = _buttons;
+	while(b != NULL && c < id) {
+		c++;
+		b = b->next;
+	}
 	if(pressed) _tft.setColor(0, 172, 237);
 	else _tft.setColor(255, 255, 255);
 	_tft.fillRoundRect(b->x, b->y, b->x + b->width, b->y + b->height);
@@ -91,5 +89,5 @@ void Menu::renderItem(UIButton * b, bool pressed) {
 		_tft.setBackColor(255, 255, 255);
 		_tft.setColor(0, 0, 0);
 	}
-	_tft.print(b->label, b->x + _itemPadding, b->y + _itemPadding);
+	_tft.print(_items[(_page * itemsPerPage) + id], b->x + _itemPadding, b->y + _itemPadding);
 }

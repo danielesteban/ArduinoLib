@@ -93,8 +93,8 @@ void UI::readTouch(UTFT tft, UTouch touch, byte orientation, TouchEvent menuOnCl
 	}
 }
 
-void UI::addButton(String label, int x, int y, int width, int height, TouchEvent onClick, TouchEvent onDown) {
-	UIButton * b = new UIButton(label, x, y, width, height, onClick, onDown);
+void UI::addButton(int x, int y, int width, int height, TouchEvent onClick, TouchEvent onDown) {
+	UIButton * b = new UIButton(x, y, width, height, onClick, onDown);
     if(_buttons == NULL) _buttons = _lastButton = b;
     else {
         _lastButton->next = b;

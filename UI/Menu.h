@@ -34,13 +34,12 @@ class Menu : public UI {
         UTFT _tft;
 
         String _title;
+        String * _items;
 
         TouchEvent _onClick;
         TouchEvent _onDown;
 
-        UIButton * _items[itemsPerPage];
-
-        void renderItem(UIButton * b, bool pressed = false);
+        void renderItem(byte id, bool pressed = false);
         void onClick(byte id);
         void onDown(byte id);
 };
