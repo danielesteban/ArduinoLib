@@ -15,6 +15,7 @@
 #else
 #include <Wire.h>
 #endif
+#include <EEPROM.h>
 
 typedef void (*nunchuckAnalogEvent)(/*byte pin, */byte axis, int read);
 typedef void (*nunchuckButtonEvent)(/*byte pin, */byte button); 
@@ -46,17 +47,20 @@ typedef struct nunchuck {
     int jYSum;
     byte JoyYZero;
 
-    /*int xRead;
+    int xRead;
     int xReadings[nunchucksReadings];
-    int xSum;*/
+    int xSum;
+    int xZero;
 
-    int yRead;
+    /*int yRead;
     int yReadings[nunchucksReadings];
     int ySum;
+    int yZero;
 
-    /*int zRead;
+    int zRead;
     int zReadings[nunchucksReadings];
-    int zSum;*/
+    int zSum;
+    int zZero;*/
     
     //struct nunchuck * next;
 } nunchuck;

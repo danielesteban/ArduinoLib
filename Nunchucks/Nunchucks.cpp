@@ -25,13 +25,20 @@ Nunchucks::Nunchucks(nunchuckAnalogEvent onJoyChange, nunchuckAnalogEvent onAcce
     //delay(1);
 }*/
 
-void Nunchucks::setup(/*byte pin*/) {
+void Nunchucks::setup(/*byte pin, byte eepromBit */) {
     nunchuck * n = (nunchuck *) malloc(sizeof(nunchuck));
     //n->pin = pin;
-    n->cnt = n->reading = n->jXRead = n->jXSum = n->JoyXZero = n->jYRead = n->jYSum = n->JoyYZero = /*n->xRead = n->xSum = */n->yRead = n->ySum = /*n->zRead = n->zSum =*/ 0;
+    n->cnt = n->reading = n->jXRead = n->jXSum = n->JoyXZero = n->jYRead = n->jYSum = n->JoyYZero = n->xRead = n->xSum = /*n->yRead = n->ySum = n->zRead = n->zSum =*/ 0;
     for(byte x=0; x<nunchucksReadings; x++) {
-        n->jXReadings[x] = n->jYReadings[x] = /*n->xReadings[x] = */n->yReadings[x] = /*n->zReadings[x] =*/ 0;
+        n->jXReadings[x] = n->jYReadings[x] = n->xReadings[x] = /*n->yReadings[x] = n->zReadings[x] =*/ 0;
     }
+    byte eepromBit = 0;
+    n->xZero = (int) EEPROM.read(eepromBit) + ((int) EEPROM.read(eepromBit + 1) << 8);
+    n->xZero == 65535 && (n->xZero = 0);
+    //n->yZero = (int) EEPROM.read(eepromBit + 2) + ((int) EEPROM.read(eepromBit + 3) << 8);
+    //n->yZero == 65535 && (n->xZero = 0);
+    //n->zZero = (int) EEPROM.read(eepromBit + 4) + ((int) EEPROM.read(eepromBit + 5) << 8);
+    //n->zZero == 65535 && (n->xZero = 0);
     //n->next = _nunchucks;
     _nunchucks = n;
     //pinMode(pin, OUTPUT);
@@ -95,31 +102,34 @@ void Nunchucks::read(bool dontTriggerEvents) {
                 if(!dontTriggerEvents && _onJoyChange != NULL) _onJoyChange(/*n->pin,*/ 1, n->JoyYZero - read);
             }
 
-            /*n->xSum -= n->xReadings[n->reading];
+            n->xSum -= n->xReadings[n->reading];
             n->xReadings[n->reading] = ((int) n->status[2] << 2) + ((n->status[5] & B00001100) >> 2);
             n->xSum += n->xReadings[n->reading];
             read = round((float) n->xSum / (float) nunchucksReadings);
             if(abs(n->xRead - read) > 1) {
+                //read >= n->xZero - 1 && read <= n->xZero + 1 && (read = n->xZero);
                 n->xRead = read;
-                if(_onAccelChange != NULL) _onAccelChange(n->pin, 0, read);
-            }*/
+                if(_onAccelChange != NULL) _onAccelChange(/*n->pin, */0, read - n->xZero);
+            }
 
-            n->ySum -= n->yReadings[n->reading];
+            /*n->ySum -= n->yReadings[n->reading];
             n->yReadings[n->reading] = ((int) n->status[3] << 2) + ((n->status[5] & B00110000) >> 4);
             n->ySum += n->yReadings[n->reading];
             read = round((float) n->ySum / (float) nunchucksReadings);
             if(abs(n->yRead - read) > 1) {
+                read >= n->yZero - 1 && read <= n->yZero + 1 && (read = n->yZero);
                 n->yRead = read;
-                if(_onAccelChange != NULL) _onAccelChange(/*n->pin, */1, read);
-            }
+                if(_onAccelChange != NULL) _onAccelChange(n->pin, 1, n->yZero - read);
+            }*/
 
             /*n->zSum -= n->zReadings[n->reading];
             n->zReadings[n->reading] = ((int) n->status[4] << 2) + ((n->status[5] & B11000000) >> 6);
             n->zSum += n->zReadings[n->reading];
             read = round((float) n->zSum / (float) nunchucksReadings);
             if(abs(n->zRead - read) > 1) {
+                read >= n->zZero - 1 && read <= n->zZero + 1 && (read = n->zZero);
                 n->zRead = read;
-                if(_onAccelChange != NULL) _onAccelChange(n->pin, 2, read);
+                if(_onAccelChange != NULL) _onAccelChange(n->pin, 2, n->zZero - read);
             }*/
             
             n->reading++;
