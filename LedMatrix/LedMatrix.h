@@ -22,7 +22,7 @@ class LedMatrix {
 		void setPixel(byte n, byte brightness);
 		void clear();
 		void update();
-		void printNumber(byte x, byte y, byte n);
+		void printNumber(byte x, byte y, byte n, byte brightness = 255);
 		
 		static const byte numColums = 8,
 			numRows = 8;
