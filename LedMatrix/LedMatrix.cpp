@@ -151,8 +151,6 @@ void LedMatrix::update() {
 void LedMatrix::printNumber(byte x, byte y, byte n) {
 	n = constrain(n, 0, 9);
 	for(byte py=0; py<5; py++) {
-		for(byte px=0; px<3; px++) {
-			setPixel(px + x, py + y, pgm_read_byte_near(numbers[n] + ((py * 3) + px)) ? 255 : 0);
-		}
+		for(byte px=0; px<3; px++) setPixel(px + x, py + y, pgm_read_byte_near(numbers[n] + ((py * 3) + px)) ? 255 : 0);
 	}
 }
