@@ -25,19 +25,19 @@ Nunchucks::Nunchucks(nunchuckAnalogEvent onJoyChange, nunchuckAnalogEvent onAcce
     //delay(1);
 }*/
 
-void Nunchucks::setup(/*byte pin, byte eepromBit */) {
+void Nunchucks::setup(/*byte pin, byte eepromByte */) {
     nunchuck * n = (nunchuck *) malloc(sizeof(nunchuck));
     //n->pin = pin;
     n->cnt = n->reading = n->jXRead = n->jXSum = n->JoyXZero = n->jYRead = n->jYSum = n->JoyYZero = n->xRead = n->xSum = /*n->yRead = n->ySum = n->zRead = n->zSum =*/ 0;
     for(byte x=0; x<nunchucksReadings; x++) {
         n->jXReadings[x] = n->jYReadings[x] = n->xReadings[x] = /*n->yReadings[x] = n->zReadings[x] =*/ 0;
     }
-    byte eepromBit = 0;
-    n->xZero = (int) EEPROM.read(eepromBit) + ((int) EEPROM.read(eepromBit + 1) << 8);
+    byte eepromByte = 0;
+    n->xZero = (int) EEPROM.read(eepromByte) + ((int) EEPROM.read(eepromByte + 1) << 8);
     n->xZero == 65535 && (n->xZero = 0);
-    //n->yZero = (int) EEPROM.read(eepromBit + 2) + ((int) EEPROM.read(eepromBit + 3) << 8);
+    //n->yZero = (int) EEPROM.read(eepromByte + 2) + ((int) EEPROM.read(eepromByte + 3) << 8);
     //n->yZero == 65535 && (n->xZero = 0);
-    //n->zZero = (int) EEPROM.read(eepromBit + 4) + ((int) EEPROM.read(eepromBit + 5) << 8);
+    //n->zZero = (int) EEPROM.read(eepromByte + 4) + ((int) EEPROM.read(eepromByte + 5) << 8);
     //n->zZero == 65535 && (n->xZero = 0);
     //n->next = _nunchucks;
     _nunchucks = n;
@@ -107,7 +107,7 @@ void Nunchucks::read(bool dontTriggerEvents) {
             n->xSum += n->xReadings[n->reading];
             read = round((float) n->xSum / (float) nunchucksReadings);
             if(abs(n->xRead - read) > 1) {
-                //read >= n->xZero - 1 && read <= n->xZero + 1 && (read = n->xZero);
+                read >= n->xZero - 10 && read <= n->xZero + 10 && (read = n->xZero);
                 n->xRead = read;
                 if(_onAccelChange != NULL) _onAccelChange(/*n->pin, */0, read - n->xZero);
             }

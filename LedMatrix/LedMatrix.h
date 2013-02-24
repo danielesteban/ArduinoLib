@@ -13,6 +13,10 @@
 #include <WProgram.h>
 #endif
 
+#include <EEPROM.h>
+//#define POPULATE_EEPROM 1
+#define NUMBERS_IN_EEPROM 1
+
 class LedMatrix {
 	public:
 		LedMatrix(volatile unsigned char * DirectionRegister, volatile unsigned char * Port, byte LatchPin, byte ClockPin, byte DataPin);
@@ -36,6 +40,11 @@ class LedMatrix {
 			_row,
 			_pixels[numColums * numRows];
 
+		#if defined(POPULATE_EEPROM) | defined(NUMBERS_IN_EEPROM)
+		static const int eepromByte = 300;
+		#endif
+
+		#if defined(POPULATE_EEPROM) | !defined(NUMBERS_IN_EEPROM)
 		static bool zero[15] PROGMEM;
 		static bool one[15] PROGMEM;
 		static bool two[15] PROGMEM;
@@ -48,6 +57,7 @@ class LedMatrix {
 		static bool nine[15] PROGMEM;
 
 		static const bool * numbers[10];
+		#endif
 };
  
 #endif

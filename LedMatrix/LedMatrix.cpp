@@ -6,6 +6,7 @@
 
 #include "LedMatrix.h"
 
+#if defined(FILL_EEPROM) | !defined(NUMBERS_IN_EEPROM)
 bool LedMatrix::zero[15] PROGMEM = {
 	1, 1, 1,
 	1, 0, 1,
@@ -87,8 +88,19 @@ bool LedMatrix::nine[15] PROGMEM = {
 };
 
 const bool * LedMatrix::numbers[10] = {zero, one, two, three, four, five, six, seven, eight, nine};
+#endif
 
 LedMatrix::LedMatrix(volatile unsigned char * DirectionRegister, volatile unsigned char * Port, byte LatchPin, byte ClockPin, byte DataPin) {
+	#ifdef POPULATE_EEPROM
+		for(byte x=0; x<10; x++) {
+			byte data = 0;
+			for(byte j=0; j<8; j++) pgm_read_byte_near(numbers[x] + j) && (data |= (1 << j));
+	        EEPROM.write(eepromByte + (x * 2), data);
+	        data = 0;
+	        for(byte j=8; j<15; j++) pgm_read_byte_near(numbers[x] + j) && (data |= (1 << (j - 8)));
+	        EEPROM.write(eepromByte + (x * 2) + 1, data);
+		}
+	#endif
 	_port = Port;
 	_latchPin = LatchPin;
 	_clockPin = ClockPin;
@@ -151,6 +163,13 @@ void LedMatrix::update() {
 void LedMatrix::printNumber(byte x, byte y, byte n, byte brightness) {
 	n = constrain(n, 0, 9);
 	for(byte py=0; py<5; py++) {
-		for(byte px=0; px<3; px++) setPixel(px + x, py + y, pgm_read_byte_near(numbers[n] + ((py * 3) + px)) ? brightness : 0);
+		for(byte px=0; px<3; px++) {
+			#ifdef NUMBERS_IN_EEPROM
+				const byte i = (py * 3) + px;
+				setPixel(px + x, py + y, (EEPROM.read(eepromByte + (n * 2) + (i >= 8 ? 1 : 0)) & (1 << (i >= 8 ? i - 8 : i))) ? brightness : 0);
+			#else
+				setPixel(px + x, py + y, pgm_read_byte_near(numbers[n] + ((py * 3) + px)) ? brightness : 0);
+			#endif
+		}
 	}
 }
